@@ -1,0 +1,13 @@
+# Python
+__pycache__
+.pyc
+
+# PyInstaller
+build
+*.spec
+
+# macOS
+.DS_Store
+
+# CrysFML2008 clone
+CrysFML2008

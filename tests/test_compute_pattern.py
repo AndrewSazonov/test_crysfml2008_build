@@ -5,11 +5,11 @@ import numpy as np
 from numpy.testing import assert_almost_equal
 from deepdiff import DeepDiff
 
-sys.path.append(os.path.join('ifort','Python_API','CFML_api'))  # ifort crysfml_api and powder_mod
-sys.path.append(os.path.join('gfortran','Python_API','CFML_api'))  # gfortran crysfml_api and powder_mod
+sys.path.append(os.path.join('CrysFML2008','ifort','Python_API','CFML_api'))  # ifort crysfml_api and powder_mod
+sys.path.append(os.path.join('CrysFML2008','gfortran','Python_API','CFML_api'))  # gfortran crysfml_api and powder_mod
 import powder_mod
 
-os.environ['FULLPROF'] = os.path.abspath('Src')  # access to Src/Databases/magnetic_data.txt
+os.environ['FULLPROF'] = os.path.abspath(os.path.join('CrysFML2008','Src'))  # access to Src/Databases/magnetic_data.txt
 
 STUDY_DICT = {
   "phases": [
@@ -121,7 +121,7 @@ def clean_after_compute(study_dict:dict):
 # Tests
 
 def test_magnetic_data_txt_exists():
-    fpath = os.path.abspath(os.path.join('Src','Databases','magnetic_data.txt'))
+    fpath = os.path.abspath(os.path.join('CrysFML2008','Src','Databases','magnetic_data.txt'))
     assert os.path.isfile(fpath) == True
 
 def test_phase_name_SrTiO3():

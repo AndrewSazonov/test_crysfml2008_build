@@ -37,7 +37,7 @@ jobs:
           mkdir build
           cd build
           cmake -D CMAKE_Fortran_COMPILER=gfortran -D PYTHON_API=ON ..
-          cmake --build . --target install -- -j8
+          cmake --build . --target install -- -j4
 
       - name: Run tests
         run: pytest tests/ -vv
