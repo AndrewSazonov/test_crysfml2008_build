@@ -31,12 +31,8 @@ jobs:
       - name: Install OS-specific dependences (macOS)
         if: runner.os == 'macOS'
         run: |
-          brew install gcc
-          brew reinstall gcc
-          gcc --version
-          gfortran --version
-          which gfortran
-          echo $PATH
+          brew reinstall gcc  # to add gfortran
+          brew install python-colorama  # as pip install colorama not working
 
       - name: CrysFML2008 (python_api branch)
         run: git clone --single-branch --branch python_api https://code.ill.fr/rodriguez-carvajal/CrysFML2008.git
