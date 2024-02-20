@@ -4,18 +4,24 @@ on: [push, pull_request]
 
 jobs:
   build-and-test:
-    timeout-minutes: 10
+    timeout-minutes: 30
 
     runs-on: ${{ matrix.os }}
 
     strategy:
       fail-fast: false
       matrix:
-        os: [macos-12]  # [ubuntu-20.04, macos-12, windows-2022]
+        os: [windows-2022]  # [ubuntu-20.04, macos-12, windows-2022]
 
     steps:
       - name: Check-out repository
         uses: actions/checkout@v3
+
+      - name: Install OS-specific dependences (Windows)
+        if: runner.os == 'Windows'
+        run: |
+          curl -sL https://github.com/brechtsanders/winlibs_mingw/releases/download/13.2.0posix-17.0.6-11.0.1-ucrt-r5/winlibs-x86_64-posix-seh-gcc-13.2.0-llvm-17.0.6-mingw-w64ucrt-11.0.1-r5.zip -o mingw.zip
+          tar -xf mingw.zip
 
       - name: Set up Python environment
         uses: actions/setup-python@v4
@@ -37,13 +43,26 @@ jobs:
       - name: CrysFML2008 (python_api branch)
         run: git clone --single-branch --branch python_api https://code.ill.fr/rodriguez-carvajal/CrysFML2008.git
 
-      - name: Build crysfml_api and powder_mode
+      - name: Build crysfml_api and powder_mode (non-Windows)
+        if: runner.os != 'Windows'
         run: |
           cd CrysFML2008
           mkdir build
           cd build
           cmake -D CMAKE_Fortran_COMPILER=gfortran -D PYTHON_API=ON ..
-          cmake --build . --target install -- -j4
+          cmake --build . --target install
+
+      - name: Build crysfml_api and powder_mode (Windows)
+        if: runner.os == 'Windows'
+        run: |
+          $env:PATH = 'D:\a\test_crysfml2008_build\test_crysfml2008_build\mingw64\bin;' + $env:PATH
+          gfortran -dumpversion
+          cd CrysFML2008
+          mkdir build
+          cd build
+          gfortran -dumpversion
+          cmake -G "Visual Studio 17 2022" -D CMAKE_Fortran_COMPILER=D:/a/test_crysfml2008_build/test_crysfml2008_build/mingw64/bin/gfortran.exe -D PYTHON_API=ON ..
+          cmake --build . --target install
 
       - name: Run tests
         run: pytest tests/ -vv
