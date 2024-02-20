@@ -1,0 +1,42 @@
+name: Build and test
+
+on: [push, pull_request]
+
+jobs:
+  build-and-test:
+    timeout-minutes: 20
+
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-20.04]  # [ubuntu-20.04, macos-12, windows-2022]
+
+    steps:
+      - name: Check-out repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python environment
+        uses: actions/setup-python@v4
+        with:
+            python-version: 3.11
+
+      - name: Upgrade PIP
+        run: python -m pip install --upgrade pip
+
+      - name: Install Python dependences
+        run: python -m pip install numpy pytest deepdiff
+
+      - name: Build crysfml_api and powder_mode
+        run: |
+          git clone --single-branch --branch python_api https://code.ill.fr/rodriguez-carvajal/CrysFML2008.git
+          cd CrysFML2008
+          mkdir build
+          cd build
+          cmake -D CMAKE_Fortran_COMPILER=gfortran -D PYTHON_API=ON ..
+          cmake --build . --target install -- -j4
+          cd ..
+
+      - name: Run pytest
+        run: pytest -vv
