@@ -152,7 +152,7 @@ def test_compute_pattern_SrTiO3_Pm3m():
     assert_almost_equal(y_expected, y_calc, decimal=0, verbose=True)
 
 def test_compute_pattern_SrTiO3_Pnma():
-    y_expected = np.loadtxt('tests/srtio3-pmmm-pattern_Sazonov-ifort.xy', unpack=True)
+    y_expected = np.loadtxt('tests/srtio3-pmmm-pattern_Andrew-ifort.xy', unpack=True)
     study_dict = copy.deepcopy(STUDY_DICT)
     set_space_group_by_phase_idx(study_dict, phase_idx=0, space_group='P n m a')
     clean_after_compute(study_dict)
