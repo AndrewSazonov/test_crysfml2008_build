@@ -26,11 +26,13 @@ jobs:
         run: python -m pip install --upgrade pip
 
       - name: Install Python dependences
-        run: python -m pip install numpy pytest deepdiff
+        run: python -m pip install colorama numpy pytest deepdiff
+
+      - name: CrysFML2008 (python_api branch)
+        run: git clone --single-branch --branch python_api https://code.ill.fr/rodriguez-carvajal/CrysFML2008.git
 
       - name: Build crysfml_api and powder_mode
         run: |
-          git clone --single-branch --branch python_api https://code.ill.fr/rodriguez-carvajal/CrysFML2008.git
           cd CrysFML2008
           mkdir build
           cd build
